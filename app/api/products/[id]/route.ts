@@ -5,22 +5,42 @@ function isAdmin(req: NextRequest) {
   return req.cookies.get('admin_session')?.value === 'authenticated';
 }
 
-export async function GET(_: NextRequest, { params }: { params: { id: string } }) {
+// ✅ Correct context typing
+export async function GET(
+  req: NextRequest,
+  context: { params: { id: string } }
+) {
   try {
-    const product = await prisma.product.findUnique({ where: { id: params.id } });
-    if (!product) return NextResponse.json({ error: 'Not found' }, { status: 404 });
+    const product = await prisma.product.findUnique({
+      where: { id: context.params.id },
+    });
+
+    if (!product) {
+      return NextResponse.json({ error: 'Not found' }, { status: 404 });
+    }
+
     return NextResponse.json(product);
   } catch {
-    return NextResponse.json({ error: 'Failed to fetch product' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Failed to fetch product' },
+      { status: 500 }
+    );
   }
 }
 
-export async function PUT(req: NextRequest, { params }: { params: { id: string } }) {
-  if (!isAdmin(req)) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+export async function PUT(
+  req: NextRequest,
+  context: { params: { id: string } }
+) {
+  if (!isAdmin(req)) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   try {
     const body = await req.json();
+
     const product = await prisma.product.update({
-      where: { id: params.id },
+      where: { id: context.params.id },
       data: {
         name: body.name,
         description: body.description,
@@ -30,18 +50,34 @@ export async function PUT(req: NextRequest, { params }: { params: { id: string }
         stock: parseInt(body.stock),
       },
     });
+
     return NextResponse.json(product);
   } catch {
-    return NextResponse.json({ error: 'Failed to update product' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Failed to update product' },
+      { status: 500 }
+    );
   }
 }
 
-export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
-  if (!isAdmin(req)) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+export async function DELETE(
+  req: NextRequest,
+  context: { params: { id: string } }
+) {
+  if (!isAdmin(req)) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   try {
-    await prisma.product.delete({ where: { id: params.id } });
+    await prisma.product.delete({
+      where: { id: context.params.id },
+    });
+
     return NextResponse.json({ success: true });
   } catch {
-    return NextResponse.json({ error: 'Failed to delete product' }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Failed to delete product' },
+      { status: 500 }
+    );
   }
 }
