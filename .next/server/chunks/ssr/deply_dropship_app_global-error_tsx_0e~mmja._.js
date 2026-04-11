@@ -1,0 +1,3 @@
+module.exports=[61809,a=>{"use strict";var b=a.i(72695);a.s(["default",0,function({error:a,reset:c}){return(0,b.jsx)("html",{children:(0,b.jsx)("body",{children:(0,b.jsx)("div",{className:"min-h-screen flex items-center justify-center text-center px-6",children:(0,b.jsxs)("div",{children:[(0,b.jsx)("h2",{className:"text-2xl font-light mb-4",children:"Something went wrong"}),(0,b.jsx)("p",{className:"text-sm text-gray-500 mb-6",children:a.message}),(0,b.jsx)("button",{onClick:c,className:"px-6 py-3 rounded-full bg-black text-white text-sm hover:opacity-80 transition-opacity",children:"Try Again"})]})})})})}])}];
+
+//# sourceMappingURL=deply_dropship_app_global-error_tsx_0e~mmja._.js.map
