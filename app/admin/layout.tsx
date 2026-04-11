@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation';
 import AdminSidebar from './AdminSidebar';
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
   const session = cookieStore.get('admin_session');
   if (!session || session.value !== 'authenticated') redirect('/admin-login');
 
